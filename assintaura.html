@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <title>Assinatura</title>
+    <style>
+      body {
+        font-family: "Lato", sans-serif;
+      }
+
+      #formulario {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        overflow: auto; /* Adiciona rolagem quando o conteúdo excede o tamanho da tela */
+      }
+
+      #formulario form {
+        background: white;
+        padding: 5rem;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 100%;
+        max-height: 100%;
+        overflow: auto; /* Adiciona rolagem se o formulário exceder o tamanho da tela */
+      }
+
+      #assinaturaform {
+        max-width: 100svw;
+        max-height: 100svh;
+      }
+
+      #formulario label {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      #formulario input[type="text"],
+      #formulario input[type="email"],
+      #formulario input[type="tel"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      #formulario input[type="file"] {
+        margin-bottom: 10px;
+      }
+
+      #formulario button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      #formulario button:hover {
+        background-color: #45a049;
+      }
+
+      table {
+        width: 60rem;
+        border-collapse: collapse;
+        margin: 0;
+      }
+
+      th,
+      td {
+        text-align: center;
+        padding: 0.67rem;
+      }
+
+      .texto {
+        text-align: left;
+        color: #202124;
+        padding: 0.67rem;
+      }
+
+      .texto a,
+      .texto a:visited,
+      .texto a:hover,
+      .texto a:active {
+        color: #202124;
+        text-decoration: none;
+      }
+
+      #nomeDisplay {
+        font-weight: bold;
+        font-size: 2rem;
+        color: #f58220;
+      }
+
+      #cargoDisplay {
+        font-weight: bold;
+        font-size: 1.33rem;
+        color: #202124;
+      }
+
+      a {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      #bg1 {
+        width: 25rem;
+        height: 25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+
+      #bg1 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      #foto {
+        width: 15rem;
+        height: 15rem;
+        margin: 9px 7px 0 0;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #logo {
+        width: 10rem;
+      }
+
+      #logocontainer {
+        width: 10rem;
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        position: relative;
+      }
+
+      #img {
+        width: 20rem;
+      }
+
+      #tdfoto {
+        width: 20rem;
+        height: 20rem;
+      }
+
+      .ico {
+        width: 1.33rem;
+        height: 1.33rem;
+      }
+
+      .contato {
+        height: 1.33rem;
+      }
+
+      #tdespaco {
+        height: 2rem;
+      }
+
+      #cropperImage {
+        max-width: 100%;
+        max-height: 80vh; /* Ajusta a altura máxima da imagem para 80% da altura da tela */
+        display: block;
+        margin: 0 auto;
+      }
+
+      .cropper-container {
+        max-width: 60vw;
+        max-height: 50vh;
+        overflow: auto;
+      }
+
+      /* Ajusta o tamanho máximo da imagem para caber no contêiner */
+      .cropper-image {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="formulario">
+      <form id="assinaturaForm">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nomeInput" name="nome" required />
+
+        <label for="cargo">Cargo:</label>
+        <input type="text" id="cargoInput" name="cargo" required />
+
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefoneInput" name="telefone" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="emailInput" name="email" required />
+
+        <label for="foto">Foto:</label>
+        <input
+          type="file"
+          id="fotoInput"
+          name="foto"
+          accept="image/*"
+          required
+        />
+
+        <!-- Área de corte da imagem -->
+        <div class="cropper-container">
+          <img
+            id="cropperImage"
+            class="cropper-image"
+            style="max-width: 100%"
+          />
+        </div>
+        <br />
+        <button id="cropButton" style="display: none">Cortar e Submeter</button>
+      </form>
+    </div>
+
+    <table id="tabela" style="display: none">
+      <tr>
+        <td rowspan="7" id="tdfoto">
+          <div id="bg1">
+            <img src="img/bg1.png" alt="Imagem de fundo" />
+            <div id="foto">
+              <img id="fotoDisplay" src="" alt="Foto" />
+            </div>
+          </div>
+        </td>
+        <td rowspan="3"></td>
+        <td class="texto">
+          <span id="nomeDisplay">Nome</span>
+        </td>
+        <td rowspan="7">
+          <div id="logocontainer">
+            <img id="img" src="img/logo.png" alt="Logo" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="texto">
+          <span id="cargoDisplay">Cargo</span>
+        </td>
+      </tr>
+      <tr>
+        <td id="tdespaco"></td>
+      </tr>
+      <tr>
+        <td rowspan="5"></td>
+        <td class="texto contato">
+          <a id="linkWA" href="https://wa.me/5562985937700">
+            <img class="ico" src="img/fone.png" />
+            <span id="telefoneDisplay">telefone</span>
+          </a>
+        </td>
+      </tr>
+      <td class="texto contato">
+        <a id="linkemail" href="mailto:neuber.castro@postoaki.com.br">
+          <img class="ico" src="img/mail.png" />
+          <span id="emailDisplay">email</span>
+        </a>
+      </td>
+      <tr>
+        <td class="texto contato">
+          <a id="linksite" href="https://postoaki.com.br">
+            <img class="ico" src="img/site.png" />
+            <span id="site">postoaki.com.br</span>
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td class="texto" style="height: 100%">
+          <a
+            id="linklocalizacao"
+            href="https://maps.app.goo.gl/utuLW2yV8qCJt17H7"
+          >
+            <img class="ico" src="img/localizacao.png" />
+            <span id="endereco">
+              Rua 1114, nº 63 – Hyper Ideia Coworking - 3º Andar <br />
+              St. Pedro Ludovico <br />
+              Goiânia – GO. <br />
+              74830-390
+            </span>
+          </a>
+        </td>
+      </tr>
+    </table>
+
+    <script>
+      document
+        .getElementById("telefoneInput")
+        .addEventListener("input", function (event) {
+          let telefone = event.target.value;
+
+          // Remove todos os caracteres não numéricos
+          telefone = telefone.replace(/\D/g, "");
+
+          // Limita o número de caracteres
+          if (telefone.length > 11) {
+            telefone = telefone.slice(0, 11);
+          }
+
+          // Aplica a máscara dependendo do número de caracteres
+          if (telefone.length <= 10) {
+            telefone = telefone.replace(
+              /^(\d{2})(\d{0,4})(\d{0,4})$/,
+              "($1) $2-$3"
+            );
+          } else {
+            telefone = telefone.replace(
+              /^(\d{2})(\d{1})(\d{0,4})(\d{0,4})$/,
+              "($1) $2 $3-$4"
+            );
+          }
+
+          // Atualiza o valor do campo com a máscara
+          event.target.value = telefone;
+        });
+
+      document
+        .getElementById("telefoneInput")
+        .addEventListener("input", function (event) {
+          let telefone = event.target.value;
+
+          // Remove todos os caracteres não numéricos
+          telefone = telefone.replace(/\D/g, "");
+
+          // Aplica a máscara
+          telefone = telefone.replace(/^(\d{2})(\d)/, "($1) $2"); // Adiciona o DDD
+          telefone = telefone.replace(/(\d{1})(\d{4})(\d{4})$/, "$1 $2-$3"); // Aplica o formato (9) 0000-0000
+
+          // Atualiza o valor do campo com a máscara
+          event.target.value = telefone;
+        });
+
+      const emailInput = document.getElementById("emailInput");
+
+      emailInput.addEventListener("blur", function () {
+        let emailValue = emailInput.value;
+
+        // Encontra a posição do primeiro "@"
+        const atIndex = emailValue.indexOf("@");
+
+        // Se houver um "@", substitua o que estiver após ele por "@postoaki.com.br"
+        if (atIndex !== -1) {
+          emailValue = emailValue.substring(0, atIndex); // Pega o que está antes do "@"
+        }
+
+        // Adiciona "@postoaki.com.br" ao valor
+        emailInput.value = emailValue + "@postoaki.com.br";
+      });
+
+      const fotoInput = document.getElementById("fotoInput");
+      const cropperImage = document.getElementById("cropperImage");
+      const cropButton = document.getElementById("cropButton");
+      let cropper;
+
+      fotoInput.addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            // Destruir a instância anterior do Cropper, se existir
+            if (cropper) {
+              cropper.destroy();
+              cropper = null;
+            }
+
+            cropperImage.src = e.target.result;
+
+            // Criar uma nova instância do Cropper
+            cropper = new Cropper(cropperImage, {
+              aspectRatio: 1, // Define a proporção 1x1
+              viewMode: 1,
+              autoCropArea: 1,
+            });
+
+            cropButton.style.display = "block"; // Exibe o botão de corte
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      cropButton.addEventListener("click", function () {
+        const canvas = cropper.getCroppedCanvas();
+        canvas.toBlob(function (blob) {
+          // Substitui a imagem original pelo corte
+          const url = URL.createObjectURL(blob);
+          document.getElementById("fotoDisplay").src = url;
+
+          // Agora, envie a imagem cortada para o servidor ou continue com o formulário
+          document.getElementById("formulario").style.display = "none";
+          document.getElementById("tabela").style.display = "block";
+          // Função de gerar imagem...
+        });
+      });
+
+      cropButton.addEventListener("click", function () {
+        const canvas = cropper.getCroppedCanvas();
+        canvas.toBlob(function (blob) {
+          // Substitui a imagem original pelo corte
+          const url = URL.createObjectURL(blob);
+          document.getElementById("fotoDisplay").src = url;
+
+          // Agora, envie a imagem cortada para o servidor ou continue com o formulário
+          document.getElementById("formulario").style.display = "none";
+          document.getElementById("tabela").style.display = "block";
+          // Função de gerar imagem...
+        });
+      });
+
+      document
+        .getElementById("assinaturaForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Pegando os valores inseridos no formulário
+          const nome = document.getElementById("nomeInput").value;
+          const cargo = document.getElementById("cargoInput").value;
+          const telefone = document.getElementById("telefoneInput").value;
+          const email = document.getElementById("emailInput").value;
+          const foto = document.getElementById("fotoInput").files[0];
+
+          // Atualizando os campos da assinatura
+          document.getElementById("nomeDisplay").textContent = nome;
+          document.getElementById("cargoDisplay").textContent = cargo;
+          document.getElementById("telefoneDisplay").textContent = telefone;
+          document.getElementById("emailDisplay").textContent = email;
+
+          // Atualizando o link do WhatsApp
+          const linkWA = document.getElementById("linkWA");
+          const whatsappLink = `https://wa.me/55${telefone.replace(/\D/g, "")}`;
+          linkWA.href = whatsappLink;
+
+          // Atualizando o link de e-mail
+          const linkEmail = document.getElementById("linkemail");
+          linkEmail.href = `mailto:${email}`;
+
+          // Atualizando a foto, se disponível
+          if (foto) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              document.getElementById("fotoDisplay").src = e.target.result;
+            };
+            reader.readAsDataURL(foto);
+          }
+
+          // Escondendo o formulário após submissão
+          document.getElementById("formulario").style.display = "none";
+          document.getElementById("tabela").style.display = "block";
+
+          // Função para aguardar um atraso em milissegundos
+          function aguardar(atraso) {
+            return new Promise((resolve) => setTimeout(resolve, atraso));
+          }
+
+          // Função assíncrona para gerar a imagem após o atraso
+          async function gerarImagem() {
+            try {
+              // Aguardar 2 segundos
+              await aguardar(2000);
+
+              // Gerar o PNG da tabela usando html2canvas
+              const tabela = document.querySelector("table");
+              const canvas = await html2canvas(tabela);
+
+              // Criar um link para fazer o download do PNG
+              const link = document.createElement("a");
+              link.download = "tabela_assinatura.png";
+              link.href = canvas.toDataURL("image/png");
+              link.click();
+            } catch (error) {
+              console.error("Erro ao gerar imagem com html2canvas:", error);
+            }
+          }
+
+          // Chama a função assíncrona para gerar a imagem
+          gerarImagem();
+        });
+    </script>
+  </body>
+</html>
